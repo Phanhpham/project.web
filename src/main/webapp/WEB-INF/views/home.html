@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+<div class="min-h-screen bg-gray-100 flex flex-col">
+    <!-- Header -->
+    <header class="w-full bg-white shadow px-6 py-4 flex justify-between items-center">
+        <!-- Logo -->
+        <div class="text-xl font-bold">
+            <img width="126" height="45" src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749651082/819bc04f5546ebd7a87a7a8ebe401a97208935eb_tcebbn.png">
+        </div>
+
+        <!-- Right section: Search + Icons -->
+        <div class="flex items-center gap-4">
+            <!-- Search input -->
+            <div class="relative ml-auto">
+                <input
+                        type="text"
+                        placeholder="Type to search"
+                        class="border border-gray-300 rounded pl-10 pr-4 py-2 w-72 text-sm"
+                />
+                <svg
+                        class="absolute left-3 top-2.5 w-5 h-5 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                >
+                    <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+            </div>
+
+            <!-- Mail Icon -->
+            <button class="relative">
+                <i class="fa-regular fa-envelope" style="font-size: 20px"></i>
+                <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+
+            <!-- Notification Bell Icon -->
+            <button class="relative">
+                <svg
+                        class="w-6 h-6 text-gray-600 hover:text-blue-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                >
+                    <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                    />
+                </svg>
+                <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
+
+            <!-- Avatar -->
+            <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-10 h-10 rounded-full"/>
+
+            <!-- Logout -->
+            <button class="text-sm text-red-600 font-medium">Logout</button>
+        </div>
+    </header>
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow p-4">
+            <nav class="space-y-3">
+                <a href="#" class="text-blue-500 font-semibold block">Dashboard</a>
+                <a href="#" class="text-gray-700 block">Students</a>
+                <a href="#" class="text-gray-700 block">Courses</a>
+                <a href="#" class="text-gray-700 block">Enrollments</a>
+                <a href="#" class="text-gray-700 block">Account Manager</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            <!-- Statistic Cards -->
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="bg-white p-6 rounded shadow">
+                    <p class="text-gray-500 text-sm">Total Student</p>
+                    <p class="text-2xl font-bold text-gray-800">456</p>
+                    <p class="text-green-500 text-sm mt-1">+5.6%</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow border border-purple-400">
+                    <p class="text-gray-500 text-sm">Total Course</p>
+                    <p class="text-2xl font-bold text-gray-800">56</p>
+                    <p class="text-green-500 text-sm mt-1">+5.6%</p>
+                </div>
+                <div class="bg-white p-6 rounded shadow">
+                    <p class="text-gray-500 text-sm">Total Enrollment</p>
+                    <p class="text-2xl font-bold text-gray-800">325</p>
+                    <p class="text-green-500 text-sm mt-1">+5.6%</p>
+                </div>
+            </div>
+
+            <!-- Table and Top Seller -->
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Course Table -->
+                <div class="col-span-2 bg-white p-4 rounded shadow">
+                    <h2 class="text-lg font-semibold mb-4">Student statistics by course</h2>
+                    <table class="w-full text-sm text-left text-gray-700">
+                        <thead class="bg-gray-100 text-xs uppercase">
+                        <tr>
+                            <th class="px-3 py-2">Course ID</th>
+                            <th class="px-3 py-2">Image</th>
+                            <th class="px-3 py-2">Course Name</th>
+                            <th class="px-3 py-2">Duration</th>
+                            <th class="px-3 py-2">Total Student</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b">
+                            <td class="px-3 py-2">C0001</td>
+                            <td class="px-3 py-2"><img src="https://via.placeholder.com/30" alt="Course"/></td>
+                            <td class="px-3 py-2">Basic Web Programming</td>
+                            <td class="px-3 py-2">230</td>
+                            <td class="px-3 py-2">123</td>
+                        </tr>
+                        <!-- Thêm các hàng khác -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Top Seller -->
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="text-lg font-semibold mb-4">Top 5 course best seller</h2>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between">
+                            <span>Basic Web Programming</span>
+                            <span class="text-sm text-gray-500">50 students</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Frontend with React</span>
+                            <span class="text-sm text-gray-500">48 students</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Backend with Node.js</span>
+                            <span class="text-sm text-gray-500">45 students</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Data Science with Python</span>
+                            <span class="text-sm text-gray-500">40 students</span>
+                        </li>
+                        <li class="flex justify-between">
+                            <span>Programming with Java</span>
+                            <span class="text-sm text-gray-500">39 students</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

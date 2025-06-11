@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<div class="min-h-screen flex items-center justify-center bg-gray-900 px-4">
+    <div class="bg-white rounded-xl shadow-lg flex overflow-hidden w-full max-w-4xl">
+
+        <!-- Left image section -->
+        <div class="hidden md:flex md:w-1/2 items-center justify-center bg-cover bg-center"
+             style="background-image: url('https://images.unsplash.com/photo-1607746882042-944635dfe10e');">
+            <!-- Đổi ảnh theo thiết kế -->
+        </div>
+
+        <!-- Right login form -->
+        <div class="w-full md:w-1/2 p-8 md:p-16 bg-gray-900">
+            <div class="text-xl font-bold  text-white mb-1 text-center">Join us today 👋</div>
+            <p class="text-sm text-center text-gray-500 mb-6">
+                Clarity gives you the blocks and components you need to create a truly professional website.
+            </p>
+
+            <form action="login" th:object="${signIn}" method="post" class="bg-gray-100 rounded-xl p-6">
+                <h2 class="text-lg font-bold text-center text-gray-800 mb-4">Sign in</h2>
+
+                <div class="space-y-6">
+                    <input th:field="*{email}" type="email" placeholder="Email"
+                           class="w-full px-4 py-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p class="text-red-500 text-sm" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</p>
+
+                    <input th:field="*{password}" type="password" placeholder="Password"
+                           class="w-full px-4 py-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <p class="text-red-500 text-sm" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</p>
+                    <div class="text-sm flex justify-between items-center">
+            <span>
+              Don’t have an account,
+              <a href="register" class="text-red-500 hover:underline ml-1">register</a>
+            </span>
+                    </div>
+
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-600 text-white py-1.5 text-sm rounded-2xl hover:bg-blue-700 font-semibold transition duration-200 ease-in-out"
+                    >
+                        Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
