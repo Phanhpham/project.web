@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<form th:action="@{'/courses/update/' + ${course.id}}" method="post" th:object="${course}" enctype="multipart/form-data"
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md mx-auto">
+    <h2 class="text-xl font-semibold mb-4 text-center">Update course</h2>
+
+    <!-- Course Name -->
+    <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-bold mb-1">Course Name</label>
+        <input type="text" id="name" th:field="*{name}"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+    </div>
+
+    <!-- Duration -->
+    <div class="mb-4">
+        <label for="duration" class="block text-gray-700 font-bold mb-1">Duration</label>
+        <input type="text" id="duration" th:field="*{duration}"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></p>
+    </div>
+
+    <!-- Instructor -->
+    <div class="mb-4">
+        <label for="instructor" class="block text-gray-700 font-bold mb-1">Instructor</label>
+        <input type="text" id="instructor" th:field="*{instructor}"
+               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('instructor')}" th:errors="*{instructor}"></p>
+    </div>
+
+    <!-- Image -->
+    <div class="mb-6">
+        <label for="image" class="block text-gray-700 font-bold mb-1">Image</label>
+        <input type="file" id="image" th:field="*{file}"
+               class="block w-full text-sm text-gray-700 border border-gray-300 rounded file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        <img width="50" height="50" th:src="${course.image}" alt=""/>
+        <p class="text-red-500 text-sm mt-1" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between">
+        <a href="/pageCourse"
+           class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        >Cancel</a>
+
+
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Update
+        </button>
+    </div>
+</form>
+</body>
+</html>

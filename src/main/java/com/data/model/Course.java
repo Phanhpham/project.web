@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Course name must not be blank")
@@ -31,7 +31,7 @@ public class Course {
     @Column(nullable = false)
     @NotNull(message = "Duration is required")
     @Min(value = 1, message = "Duration must be greater than 0")
-    private Integer duration;
+    private int duration;
 
     @Column(nullable = false, length = 100)
     @NotBlank(message = "Instructor name must not be blank")
@@ -40,7 +40,7 @@ public class Course {
 
     @Column(name = "create_at", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate createAt;
+    private LocalDate createAt= LocalDate.now();
 
     @Column(length = 500)
     private String image;
