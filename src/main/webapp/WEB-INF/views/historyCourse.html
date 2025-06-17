@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>History Enrollment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white font-sans">
+
+<!-- Header -->
+<header class="w-full bg-white shadow px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="text-xl font-bold">
+        <img width="126" height="45"
+             src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749651082/819bc04f5546ebd7a87a7a8ebe401a97208935eb_tcebbn.png">
+    </div>
+    <nav class="flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="#" class="text-blue-600">List Course</a>
+        <a href="#">Enrollments</a>
+        <a href="#">Profile</a>
+    </nav>
+    <!-- Right section: Search + Icons -->
+    <div class="flex items-center gap-4">
+
+        <!-- Search input -->
+        <div class="relative ml-auto">
+            <input
+                    type="text"
+                    placeholder="Type to search"
+                    class="border border-gray-300 rounded pl-10 pr-4 py-2 w-72 text-sm"
+            />
+            <svg
+                    class="absolute left-3 top-2.5 w-5 h-5 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+        </div>
+
+        <!-- Mail Icon -->
+        <button class="relative">
+            <i class="fa-regular fa-envelope" style="font-size: 20px"></i>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Notification Bell Icon -->
+        <button class="relative">
+            <svg
+                    class="w-6 h-6 text-gray-600 hover:text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+            </svg>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Avatar -->
+        <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-10 h-10 rounded-full"/>
+
+        <!-- Logout -->
+        <button class="text-sm text-red-600 font-medium">Logout</button>
+    </div>
+</header>
+
+<!-- Content -->
+<div class="max-w-6xl mx-auto mt-8 px-4">
+    <h2 class="text-center text-2xl font-semibold text-yellow-500 mb-6">History Enrollment</h2>
+
+    <!-- Filter Row -->
+    <div class="flex justify-between mb-4">
+        <form th:action="@{'/history/'+${id}}" method="get">
+            <select name="sort" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">
+                <option value="all" th:selected="${sort == 'all'}">Sort By Status </option>
+                <option value="ASC" th:selected="${sort == 'ASC'}">Sort By Status ASC</option>
+                <option value="DESC" th:selected="${sort == 'DESC'}">Sort By Status DESC</option>
+            </select>
+        </form>
+
+        <form th:action="@{'/history/'+${id}}" method="get" class="flex space-x-2">
+            <input name="keyword" type="text" placeholder="Search by course name"
+                   class="border border-gray-300 rounded px-3 py-2 text-sm"/>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Search</button>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full border border-gray-300 text-sm text-left">
+            <thead class="bg-gray-100">
+            <tr>
+                <th class="border px-4 py-2">Course ID</th>
+                <th class="border px-4 py-2">Course Name</th>
+                <th class="border px-4 py-2">Duration (Hrs)</th>
+                <th class="border px-4 py-2">Instructor</th>
+                <th class="border px-4 py-2">Image</th>
+                <th class="border px-4 py-2">Created Date</th>
+                <th class="border px-4 py-2">Status</th>
+                <th class="border px-4 py-2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Một số dòng mẫu -->
+            <tr th:each="enrollment :${enrollments}" class="hover:bg-gray-50">
+                <td class="border px-4 py-2" th:text="${enrollment.course.id}">C0001</td>
+                <td class="border px-4 py-2" th:text="${enrollment.course.name}">Basic Web Programming</td>
+                <td class="border px-4 py-2" th:text="${enrollment.course.duration}">200</td>
+                <td class="border px-4 py-2" th:text="${enrollment.course.instructor}">John Smith</td>
+                <td class="border px-4 py-2">
+                    <img th:src="${enrollment.course.image}" class="w-8 h-8"/>
+                </td>
+                <td class="border px-4 py-2" th:text="${enrollment.registeredAt}">16/05/2025</td>
+                <td class="border px-4 py-2 text-yellow-500 font-semibold" th:text="${enrollment.status}">WAITING</td>
+                <td class="border px-4 py-2">
+                    <button class="text-orange-500 border border-orange-500 px-2 py-1 rounded text-xs">CANCEL</button>
+                </td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="items-center flex justify-center space-x-2 mt-6" th:if="${!#lists.isEmpty(enrollments)}">
+
+        <a th:if="${currentPage > 1}"
+           th:href="@{'/history/' +${id} (page=${currentPage - 1})}"
+           class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}" class="h-8 w-8 flex items-center justify-center">
+
+                <a th:href="@{'/history/' +${id} (page=${i})}"
+                   th:text="${i}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                   class="px-3 py-1 border rounded mx-1"></a>
+                  </span>
+
+        <a th:if="${currentPage < totalPages}"
+           th:href="@{'/history/' +${id} (page=${currentPage + 1})}"
+           class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

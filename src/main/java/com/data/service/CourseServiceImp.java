@@ -27,8 +27,8 @@ public class CourseServiceImp implements CourseService{
     }
 
     @Override
-    public boolean existsByCourseNameIgnoreCase(String name) {
-        return courseRepo.existsByCourseNameIgnoreCase(name);
+    public boolean existsByCourseNameIgnoreCase(String name, int id) {
+        return courseRepo.existsByCourseNameIgnoreCase(name, id);
     }
 
     @Override
@@ -54,5 +54,19 @@ public class CourseServiceImp implements CourseService{
     @Override
     public long countByName(String name) {
         return courseRepo.countByName(name);
+    }
+
+    @Override
+    public List<Course> sortByName(String action, int pageNo, int pageSize) {
+        return courseRepo.sortByName(action,pageNo,pageSize);
+    }
+
+    public boolean checkCourseNameExisted(String name){
+        return courseRepo.checkCourseNameExisted(name);
+    }
+
+    @Override
+    public List<Course> findAll(int page, int pageSize, String keyword, String sortBy, String sort) {
+        return courseRepo.findAll(page,pageSize,keyword,sortBy,sort);
     }
 }

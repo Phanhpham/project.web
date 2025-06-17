@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.beans.PropertyEditorSupport;
 import java.time.LocalDate;
@@ -88,32 +89,39 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public String login(@Valid @ModelAttribute("signIn") LoginDTO loginDTO, BindingResult bindingResult, Model model) {
+    public String login(@Valid @ModelAttribute("signIn") LoginDTO loginDTO, BindingResult bindingResult, HttpSession session,Model model) {
 
         if (bindingResult.hasErrors()) {
             return "login";
         }
+
         Student student = studentService.findByEmail(loginDTO.getEmail());
 
-        if (!student.getPassword().equals(loginDTO.getPassword())) {
-            bindingResult.rejectValue("password", "error","Mật khẩu không đúng!");
+        // Nếu tài khoản bị block
+        if (!student.getRole()) {
+            model.addAttribute("blocked", true);
             return "login";
         }
 
+        if (!student.getPassword().equals(loginDTO.getPassword())) {
+            bindingResult.rejectValue("password", "error", "Mật khẩu không đúng!");
+            return "login";
+        }
+        session.setAttribute("student", student);
 
-        if(student.getRole()){
-            return "redirect:/admin";
+        if (student.getRole()) {
+            return "redirect:/list";
         }
         return "redirect:/home";
     }
 
     @GetMapping("home")
-    public String userPage(){
+    public String userPage() {
         return "home";
     }
 
     @GetMapping("admin")
-    public String adminPage(){
+    public String adminPage() {
         return "admin";
     }
 

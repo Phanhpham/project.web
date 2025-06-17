@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -37,4 +38,29 @@ public class StudentServiceImp implements StudentService {
     public Student findByEmail(String email) {
         return studentRepo.findByEmail(email);
     }
+
+    @Override
+    public List<Student> getStudentByPage(int pageNo, int pageSize) {
+        return studentRepo.getStudentByPage(pageNo, pageSize);
+    }
+
+    @Override
+    public long countTotalStudent() {
+        return studentRepo.countTotalStudent();
+    }
+
+    @Override
+    public void blockUserById(int studentId) {
+        studentRepo.blockUserById(studentId);
+    }
+
+    @Override
+    public void unblockUserById(int studentId) {
+        studentRepo.unblockUserById(studentId);
+    }
+
+//    @Override
+//    public List<Student> searchByName(String name, String email, int id, int offset, int limit) {
+//        return studentRepo.searchByName(name,email,id,offset,limit);
+//    }
 }

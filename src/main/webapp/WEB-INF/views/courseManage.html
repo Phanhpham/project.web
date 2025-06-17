@@ -109,13 +109,15 @@
         <!-- Sort & Table -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden pb-4">
             <div class="flex justify-between items-center px-4 py-3 border-b">
-                <div>
+                <form action="sortCourse" method="get">
                     <label for="sort" class="mr-2 text-sm font-medium">Sort By</label>
-                    <select id="sort" class="border px-2 py-1 text-sm rounded-md">
-                        <option>Sort By ID</option>
-                        <option>Sort By Name</option>
+                    <select name="action" onchange="this.form.submit()" id="sort" class="border px-2 py-1 text-sm rounded-md">
+                        <option value="asc id" th:selected="${currentSort == 'asc id'}">Sort By ID ASC</option>
+                        <option value="desc id" th:selected="${currentSort == 'desc id'}">Sort By ID DESC</option>
+                        <option value="asc name" th:selected="${currentSort == 'asc name'}">Sort By Name ASC</option>
+                        <option value="desc name" th:selected="${currentSort == 'desc name'}">Sort By Name DESC</option>
                     </select>
-                </div>
+                </form>
             </div>
             <!-- Table -->
             <table class="w-full text-sm text-left">

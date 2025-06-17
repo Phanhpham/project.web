@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body class="bg-white font-sans">
+<!-- Header -->
+<header class="flex items-center justify-between px-8 py-4 border-b shadow-sm">
+    <div class="flex items-center gap-2">
+        <img src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749969776/819bc04f5546ebd7a87a7a8ebe401a97208935eb_juxmkg.png"
+             alt="Logo" class="h-8">
+    </div>
+    <nav class="flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="#" class="text-blue-600">List Course</a>
+        <a th:href="@{'history/'+ ${student.id}}">Enrollments</a>
+        <a href="#">Profile</a>
+    </nav>
+    <div class="flex items-center gap-4">
+        <!-- Mail Icon -->
+        <button class="relative">
+            <i class="fa-regular fa-envelope" style="font-size: 20px"></i>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Notification Bell Icon -->
+        <button class="relative">
+            <svg
+                    class="w-6 h-6 text-gray-600 hover:text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+            </svg>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Avatar -->
+        <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-10 h-10 rounded-full"/>
+
+        <!-- Logout -->
+        <button class="text-sm text-red-600 font-medium">Logout</button>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="px-8 py-6">
+    <!-- Title -->
+    <h1 class="text-2xl font-semibold text-yellow-500 text-center mb-6">List Courrse</h1>
+
+    <!-- Search Bar -->
+    <div class="flex justify-end mb-6">
+        <form action="list" method="get" class="flex border border-gray-300 rounded overflow-hidden">
+            <input name="keyword" type="text" placeholder="search course by name" class="px-4 py-2 outline-none w-64">
+            <button type="submit" class="bg-blue-500 text-white px-4">Search</button>
+        </form>
+    </div>
+
+    <!-- Courses Grid -->
+    <div class="grid grid-cols-5 gap-4">
+        <!-- Course Item -->
+        <div th:each="course :${courses}" class="border rounded-lg p-4 shadow-sm">
+            <img th:src="${course.image}" alt="Course" class="w-full h-32 object-cover rounded mb-4">
+            <h2 class="font-medium text-sm mb-1 text-red-500" th:text="${course.name}">Basic Web Programming</h2>
+            <p class="text-xs text-gray-500 mb-1">Last update</p>
+            <p class="text-xs" th:text="${course.duration}">Duration: 120 hour</p>
+            <p class="text-xs mb-3" th:text="${course.instructor}">Instructor: John Smith</p>
+            <div>
+                <th:block th:if="${#lists.contains(integers, course.id)}">
+                    <button class="bg-green-300 text-white text-sm px-4 py-1 rounded" disabled>Registered</button>
+                </th:block>
+
+                <th:block th:unless="${#lists.contains(integers, course.id)}">
+                    <a th:href="@{list(openModal = true, id = ${course.id})}">
+                        <button class="bg-green-500 text-white text-sm px-4 py-1 rounded">Register</button>
+                    </a>
+                </th:block>
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Pagination (moved up) -->
+    <div class="items-center flex justify-center space-x-2 mt-6">
+
+        <a
+                th:if="${currentPage > 1 and keyword == null}"
+                th:href="@{'/list'(page=${currentPage - 1})}"
+                class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </a>
+        <a
+                th:if="${currentPage > 1 and keyword != null}"
+                th:href="@{'/list'(page=${currentPage - 1},keyword = ${keyword})}"
+                class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </a>
+
+        <span th:each="i : ${#numbers.sequence(1, totalPages)}" class="h-8 w-8 flex items-center justify-center">
+
+                <a th:if="${keyword == null}"
+                   th:href="@{'/list'(page=${i})}"
+                   th:text="${i}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                   class="px-3 py-1 border rounded mx-1"></a>
+             <a th:if="${keyword != null}"
+                th:href="@{'/list'(page=${i},keyword = ${keyword})}"
+                th:text="${i}"
+                th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                class="px-3 py-1 border rounded mx-1"></a>
+                  </span>
+
+        <a th:if="${currentPage < totalPages and keyword == null}"
+           th:href="@{'/list'(page=${currentPage + 1})}"
+           class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </a>
+        <a th:if="${currentPage < totalPages and keyword != null}"
+           th:href="@{'/list'(page=${currentPage + 1},keyword = ${keyword})}"
+           class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Overlay -->
+    <div th:if="${openModal}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <!-- Modal -->
+        <div class="bg-white rounded-xl p-6 w-[344px] shadow-lg">
+            <!-- Header -->
+            <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">
+                Xác nhận
+            </h3>
+
+            <!-- Nội dung -->
+            <p class="text-sm text-center text-gray-700 mb-6">
+                Bạn có chắc chắn muốn đăng ký khóa học
+                <span class="text-blue-500 font-semibold" th:text="${course.name}">Data Science with Python</span>
+                không?
+            </p>
+
+            <!-- Nút -->
+            <div class="flex justify-end gap-3">
+                <a th:href="@{list(openModal = false)}"
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+                >
+                    Hủy
+                </a>
+                <form th:action="@{enrollment(courseId = ${id})}" method="post">
+                    <button type="submit"
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                    >
+                        Ok
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</main>
+</body>
+</html>
