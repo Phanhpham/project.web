@@ -76,13 +76,13 @@
 
 
     <!-- Sidebar -->
-    <div class="flex">
-        <aside class="w-64 bg-white shadow-md">
-            <nav class="mt-6 space-y-2 text-sm text-gray-700 font-medium">
-                <a href="#" class="block px-6 py-2 hover:bg-blue-100 text-blue-600">Dashboard</a>
-                <a href="#" class="block px-6 py-2 hover:bg-blue-100">Students</a>
-                <a href="#" class="block px-6 py-2 bg-blue-100 text-blue-600 rounded-r-lg font-semibold">Courses</a>
-                <a href="#" class="block px-6 py-2 hover:bg-blue-100">Enrollments</a>
+    <div class="flex min-h-screen bg-gray-100">
+        <aside class="w-64 bg-white shadow p-4">
+            <nav class="space-y-3">
+                <a href="/home" class="text-gray-700 block ">Dashboard</a>
+                <a href="/pageStudent" class="text-blue-500 font-semibold block">Students</a>
+                <a href="/pageCourse" class="text-gray-700 block">Courses</a>
+                <a href="/managerEnrollment" class="text-gray-700 block">Enrollments</a>
             </nav>
         </aside>
         <!-- Main Content -->
@@ -91,23 +91,26 @@
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-semibold">Student Manager</h1>
                 <div class="flex items-center space-x-4">
-                    <input type="text" placeholder="Search by id, email or name"
-                           class="px-4 py-2 border rounded-md w-64 text-sm" />
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm">Search</button>
+                    <form action="pageStudent" method="get">
+                        <input name="keyword" type="text" placeholder="Search by id, email or name"
+                               class="px-4 py-2 border rounded-md w-64 text-sm" />
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm">Search</button>
+                    </form>
                 </div>
             </div>
 
             <!-- Sort and Table -->
             <div class="bg-white rounded shadow-md p-4">
                 <div class="flex justify-between items-center mb-4">
-                    <div>
-                        <label class="mr-2 font-medium text-sm">Sort By</label>
-                        <select class="border rounded px-3 py-1 text-sm">
-                            <option>ID</option>
-                            <option>Name</option>
-                            <option>Status</option>
+                    <form action="pageStudent" method="get">
+                        <label  class="mr-2 font-medium text-sm">Sort By</label>
+                        <select name="sort" onchange="this.form.submit()" class="border rounded px-3 py-1 text-sm">
+                            <option value="ASC id" th:selected="${sort == 'ASC id' }" >ID ASC</option>
+                            <option value="DESC id" th:selected="${sort == 'DESC id' }" >ID DESC</option>
+                            <option value="ASC name" th:selected="${sort == 'ASC name' }">Name ASC</option>
+                            <option value="DESC name" th:selected="${sort == 'DESC name' }" >Name DESC</option>
                         </select>
-                    </div>
+                    </form>
                 </div>
 
                 <table class="min-w-full table-auto text-sm text-left">
@@ -122,28 +125,32 @@
                         <th class="px-4 py-2">Action</th>
                     </tr>
                     </thead>
-                    <tbody th:each="student : ${student}" class="divide-y">
-                    <tr>
+                    <tbody class="divide-y">
+                    <tr th:if="${#lists.isEmpty(student)}">
+                        <td th:text="${message}">
+                        </td>
+                    </tr>
+                    <tr th:each="student : ${student}" >
                         <td class="px-4 py-2" th:text="${student.id}">S0001</td>
                         <td class="px-4 py-2" th:text="${student.name}">Alice Johnson</td>
                         <td class="px-4 py-2" th:text="${student.email}">alice.johnson@gmail.com</td>
                         <td class="px-4 py-2" th:text="${student.sex ? 'Male' : 'Female'}">Male</td>
                         <td class="px-4 py-2" th:text="${student.phone}">0345678952</td>
                         <td class="px-4 py-2"
-                            th:text="${student.role ? 'Active' : 'InActive'}"
-                            th:classappend="${student.role} ? 'text-green-400 font-medium' : 'text-red-500 font-medium'">
+                            th:text="${student.status ? 'Active' : 'InActive'}"
+                            th:classappend="${student.status} ? 'text-green-400 font-medium' : 'text-red-500 font-medium'">
                             Active
                         </td>
                         <td class="px-4 py-2">
                             <div class="flex justify-center">
-                                <a th:if="${student.role}"
+                                <a th:if="${student.status}"
                                 th:href="@{'/students/block/' + ${student.id}}"
                                 class="text-yellow-500 border border-orange-400 bg-yellow-200 hover:bg-orange-200
                                 font-medium px-3 py-1 rounded-md text-sm">
                                 Lock
                                 </a>
 
-                                <a th:if="${!student.role}"
+                                <a th:if="${!student.status}"
                                 th:href="@{'/students/unblock/' + ${student.id}}"
                                 class="text-green-600 border border-green-500 bg-green-100 hover:bg-green-200
                                 font-medium px-3 py-1 rounded-md text-sm">
@@ -156,7 +163,7 @@
                 </table>
 
                 <!-- Pagination (moved up) -->
-                <div class="items-center flex justify-center space-x-2">
+                <div th:if="${!#lists.isEmpty(student)}" class="items-center flex justify-center space-x-2">
 
                     <a th:if="${currentPage > 1}"
                        th:href="@{'/pageStudent'(page=${currentPage - 1}, size=${5})}"

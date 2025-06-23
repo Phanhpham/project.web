@@ -16,9 +16,9 @@
              src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749651082/819bc04f5546ebd7a87a7a8ebe401a97208935eb_tcebbn.png">
     </div>
     <nav class="flex items-center gap-6 text-sm font-medium text-gray-600">
-        <a href="#" class="text-blue-600">List Course</a>
-        <a href="#">Enrollments</a>
-        <a href="#">Profile</a>
+        <a href="/list" class="hover:text-blue-600">List Course</a>
+        <a th:href="@{'history/'+  ${student != null? student.id:0}}" class="hover:text-blue-600 text-blue-600 underline">Enrollments</a>
+        <a href="/profileUser" class="hover:text-blue-600">Profile</a>
     </nav>
     <!-- Right section: Search + Icons -->
     <div class="flex items-center gap-4">
@@ -124,9 +124,20 @@
                     <img th:src="${enrollment.course.image}" class="w-8 h-8"/>
                 </td>
                 <td class="border px-4 py-2" th:text="${enrollment.registeredAt}">16/05/2025</td>
-                <td class="border px-4 py-2 text-yellow-500 font-semibold" th:text="${enrollment.status}">WAITING</td>
+                <td class="border px-4 py-2 font-semibold"
+                    th:text="${enrollment.status.name() == 'CONFIRMED'} ? 'Đã duyệt' :
+                                (${enrollment.status.name() == 'CANCELED'} ? 'Đã huỷ' :
+                                (${enrollment.status.name() == 'WAITING'} ? 'Đang chờ duyệt' : 'Từ chối'))"
+                    th:classappend="${enrollment.status.name() == 'CONFIRMED'} ? 'text-green-300' :
+                                        (${enrollment.status.name() == 'CANCELED'} ? 'text-red-500' :
+                                        (${enrollment.status.name() == 'WAITING'} ? 'text-yellow-400' : 'text-red-500'))"
+                   >WAITING</td>
                 <td class="border px-4 py-2">
-                    <button class="text-orange-500 border border-orange-500 px-2 py-1 rounded text-xs">CANCEL</button>
+                    <a th:if="${enrollment.status.name() == 'WAITING'}"
+                            th:href="@{/history/{id}(isShowModalCancel= true, enrollmentId = ${enrollment.id}, id = ${id})}">
+                        <button class="text-orange-500 border border-orange-500 px-2 py-1 rounded text-xs">CANCEL</button>
+                    </a>
+
                 </td>
             </tr>
 
@@ -162,6 +173,39 @@
             </svg>
         </a>
     </div>
+
+    <div th:if="${isShowModalCancel}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <!-- Modal -->
+        <div class="bg-white rounded-xl p-6 w-[344px] shadow-lg">
+            <!-- Header -->
+            <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">
+                Canceled
+            </h3>
+
+            <!-- Nội dung -->
+            <p class="text-sm text-center text-gray-700 mb-6">
+                Bạn có chắc chắn muon huy dang ky khong ?
+            </p>
+
+            <!-- Nút -->
+            <div class="flex justify-end gap-3">
+                <a th:href="@{/history/{id}(isShowModalCancel = false , id = ${id})}"
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+                >
+                    Hủy
+                </a>
+                <form th:action="@{/cancel(enrollmentId = ${enrollmentId})}" method="post">
+                    <button type="submit"
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                    >
+                        Ok
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 
 </body>

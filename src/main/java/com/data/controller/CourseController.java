@@ -11,6 +11,7 @@ import com.data.repository.EnrollmentRepo;
 import com.data.service.CloudinaryService;
 import com.data.service.CourseService;
 import com.data.service.EnrollmentService;
+import com.data.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -40,13 +42,18 @@ public class CourseController {
     public String pageCourse(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size,
+            HttpServletRequest request,
+            HttpSession session,
             @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "name") String sortCourse,
             @RequestParam(defaultValue = "asc") String sort,
             HttpSession httpSession,
             Model model) {
 
-
+        Student student = SessionUtils.getLoginStudent(request,session);
+        if (student == null){
+            return "redirect:/login";
+        }
         List<Course> courses = courseService.findAll(page, size, keyword, sortCourse, sort);
         long totalCourses = courseService.countTotalCourse();
         String currentSort = (String) httpSession.getAttribute("currentSort");
@@ -205,13 +212,17 @@ public class CourseController {
     @GetMapping("list")
     public String showListCourse(@RequestParam(defaultValue = "1") int page,
                                  @RequestParam(defaultValue = "5") int size,
+                                 HttpServletRequest request,
                                  @RequestParam(name = "keyword", required = false) String keyword,
                                  @RequestParam(defaultValue = "false") boolean openModal,
                                  @RequestParam(value = "id", required = false) Integer id,
                                  HttpSession session,
                                  Model model
     ) {
-        Student student = (Student) session.getAttribute("student");
+        Student student = SessionUtils.getLoginStudent(request,session);
+        if (student == null){
+            return "redirect:/login";
+        }
         List<Course> courses;
         int totalPages;
 

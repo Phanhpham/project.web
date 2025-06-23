@@ -1,6 +1,7 @@
 package com.data.service;
 
 import com.data.model.Student;
+import com.data.model.TotalStudent;
 import com.data.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,8 +60,48 @@ public class StudentServiceImp implements StudentService {
         studentRepo.unblockUserById(studentId);
     }
 
-//    @Override
-//    public List<Student> searchByName(String name, String email, int id, int offset, int limit) {
-//        return studentRepo.searchByName(name,email,id,offset,limit);
-//    }
+    @Override
+    public List<Student> searchByName(String keyword, int offset, int limit) {
+        return studentRepo.searchByName(keyword,offset,limit);
+    }
+
+    @Override
+    public long countSearch(String keyword) {
+        return studentRepo.countSearch(keyword);
+    }
+
+    @Override
+    public List<Student> sortById(String sortBy, int pageNo, int pageSize) {
+        return studentRepo.sortById(sortBy,pageNo,pageSize);
+    }
+
+    @Override
+    public List<Student> sortByName(String sortBy, int pageNo, int pageSize) {
+        return studentRepo.sortByName(sortBy,pageNo,pageSize);
+    }
+
+    @Override
+    public List<TotalStudent> getTotalStudentOfCourse() {
+        return studentRepo.getTotalStudentOfCourse();
+    }
+
+    @Override
+    public void updateProfile(Student student) {
+        studentRepo.updateProfile(student);
+    }
+
+    @Override
+    public Student findById(int id) {
+        return studentRepo.findById(id);
+    }
+
+    @Override
+    public Student findByPhone(String phone) {
+        return studentRepo.findByPhone(phone);
+    }
+
+    @Override
+    public void changePassword(int studentId, String newPassWord) {
+        studentRepo.changePassword(studentId,newPassWord);
+    }
 }

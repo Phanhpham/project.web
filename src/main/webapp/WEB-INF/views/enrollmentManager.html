@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollment Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<!-- Header -->
+<header class="w-full bg-white shadow px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="text-xl font-bold">
+        <img width="126" height="45"
+             src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749651082/819bc04f5546ebd7a87a7a8ebe401a97208935eb_tcebbn.png">
+    </div>
+
+    <!-- Right section: Search + Icons -->
+    <div class="flex items-center gap-4">
+        <!-- Search input -->
+        <div class="relative ml-auto">
+            <input
+                    type="text"
+                    placeholder="Type to search"
+                    class="border border-gray-300 rounded pl-10 pr-4 py-2 w-72 text-sm"
+            />
+            <svg
+                    class="absolute left-3 top-2.5 w-5 h-5 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+            </svg>
+        </div>
+
+        <!-- Mail Icon -->
+        <button class="relative">
+            <i class="fa-regular fa-envelope" style="font-size: 20px"></i>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Notification Bell Icon -->
+        <button class="relative">
+            <svg
+                    class="w-6 h-6 text-gray-600 hover:text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+            >
+                <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                />
+            </svg>
+            <span class="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+
+        <!-- Avatar -->
+        <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-10 h-10 rounded-full"/>
+
+        <!-- Logout -->
+        <button class="text-sm text-red-600 font-medium">Logout</button>
+    </div>
+</header>
+<!-- Logo -->
+<div class="flex min-h-screen bg-gray-100">
+    <aside class="w-64 bg-white shadow p-4">
+        <nav class="space-y-3">
+            <a href="/home" class="text-gray-700 block">Dashboard</a>
+            <a href="/pageStudent" class="text-gray-700 block">Students</a>
+            <a href="/pageCourse" class="text-gray-700 block">Courses</a>
+            <a href="/managerEnrollment" class="text-blue-500 font-semibold block">Enrollments</a>
+        </nav>
+    </aside>
+    <div class="flex-1 p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-semibold">Enrollment Manager</h1>
+            <div class="flex gap-4">
+                <form action="managerEnrollment" method="get">
+                    <select name="filter" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="all" th:selected="${filter == 'all'}">Select By Status</option>
+                        <option value="CONFIRMED" th:selected="${filter =='CONFIRMED'}">CONFIRM</option>
+                        <option value="WAITING" th:selected="${filter == 'WAITING'}" >WAITING</option>
+                        <option value="CANCELED" th:selected="${filter == 'CANCELED'}">CANCEL</option>
+                        <option value="DENIED" th:selected="${filter == 'DENIED'}">DENIED</option>
+                    </select>
+                </form>
+                <form action="managerEnrollment" method="get">
+                    <input name="keyword" type="text" placeholder="Search by course name"
+                           class="border border-gray-300 rounded px-3 py-2 text-sm w-64">
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded text-sm">Search</button>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white shadow-md rounded overflow-x-auto">
+            <table class="min-w-full text-sm text-left">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-3 font-medium text-gray-700">STT</th>
+                    <th class="px-4 py-3 font-medium text-gray-700">Student Name</th>
+                    <th class="px-4 py-3 font-medium text-gray-700">Course Name</th>
+                    <th class="px-4 py-3 font-medium text-gray-700">Registered Date</th>
+                    <th class="px-4 py-3 font-medium text-gray-700">Status</th>
+                    <th class="px-4 py-3 font-medium text-gray-700">Action</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                <!-- Example Row -->
+                <tr th:each="item, loop :${getAllList}">
+                    <td class="px-4 py-3" th:text="${(currentPage - 1) * size + loop.index+1}">E0001</td>
+                    <td class="px-4 py-3" th:text="${item.student.name}">Alice Johnson</td>
+                    <td class="px-4 py-3" th:text="${item.course.name}">Basic Web Programming</td>
+                    <td class="px-4 py-3" th:text="${item.registeredAt}">05/05/2025</td>
+                    <td class="px-4 py-2"
+                        th:text="${item.status.name() == 'CONFIRMED'} ? 'Đã duyệt' :
+                                (${item.status.name() == 'CANCELED'} ? 'Đã huỷ' :
+                                (${item.status.name() == 'WAITING'} ? 'Đang chờ duyệt' : 'Từ chối'))"
+                        th:classappend="${item.status.name() == 'CONFIRMED'} ? 'text-green-300' :
+                                        (${item.status.name() == 'CANCELED'} ? 'text-red-500' :
+                                        (${item.status.name() == 'WAITING'} ? 'text-yellow-400' : 'text-red-500'))">
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex gap-2" th:if="${item.status.name() == 'WAITING'}">
+
+                            <a th:href="@{managerEnrollment(isShowModalConfirm = true, enrollmentId = ${item.id})}">
+                                <button class="bg-green-500 text-white px-3 py-1 rounded text-xs" >CONFIRM</button>
+                            </a>
+
+                            <a th:href="@{managerEnrollment(isShowModalDeny = true, enrollmentId = ${item.id})}">
+                                <button class="bg-orange-400 text-white px-3 py-1 rounded text-xs">DENIED</button>
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+                <!-- Add more rows below following the structure -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="items-center flex justify-center space-x-2 mt-6">
+
+            <a th:if="${currentPage > 1 and filter == null and keyword == null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage - 1})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <a th:if="${currentPage > 1 and filter != null and keyword == null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage - 1}, filter = ${filter})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <a th:if="${currentPage > 1 and filter == null and keyword != null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage - 1}, keyword = ${keyword})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </a>
+
+            <span th:each="i : ${#numbers.sequence(1, totalPages)}" class="h-8 w-8 flex items-center justify-center">
+
+                <a th:if="${filter == null and keyword == null}"
+                        th:href="@{'/managerEnrollment'(page=${i})}"
+                   th:text="${i}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                   class="px-3 py-1 border rounded mx-1"></a>
+                <a th:if="${filter != null and keyword == null}"
+                        th:href="@{'/managerEnrollment'(page=${i}, filter = ${filter})}"
+                   th:text="${i}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                   class="px-3 py-1 border rounded mx-1"></a>
+
+                <a th:if="${filter == null and keyword != null}"
+                   th:href="@{'/managerEnrollment'(page=${i}, keyword = ${keyword})}"
+                   th:text="${i}"
+                   th:classappend="${i == currentPage} ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'"
+                   class="px-3 py-1 border rounded mx-1"></a>
+
+                  </span>
+
+            <a th:if="${currentPage < totalPages and filter == null and keyword == null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage + 1})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+            <a th:if="${currentPage < totalPages and filter != null and keyword== null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage + 1}, filter = ${filter})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+            <a th:if="${currentPage < totalPages and filter == null and keyword != null}"
+               th:href="@{'/managerEnrollment'(page=${currentPage + 1}, keyword = ${keyword})}"
+               class="w-8 h-8 flex items-center justify-center border rounded-md bg-gray-200 hover:bg-gray-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </a>
+        </div>
+    </div>
+    <!-- Overlay -->
+    <div th:if="${isShowModalConfirm}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <!-- Modal -->
+        <div class="bg-white rounded-xl p-6 w-[344px] shadow-lg">
+            <!-- Header -->
+            <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">
+                Xác nhận
+            </h3>
+
+            <!-- Nội dung -->
+            <p class="text-sm text-center text-gray-700 mb-6">
+                Bạn có chắc chắn muốn xác nhận đăng ký không ?
+            </p>
+
+            <!-- Nút -->
+            <div class="flex justify-end gap-3">
+                <a th:href="@{managerEnrollment(isShowModalConfirm = false)}"
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+                >
+                    Hủy
+                </a>
+                <form th:action="@{confirm(enrollmentId = ${enrollmentId})}" method="post">
+                    <button type="submit"
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                    >
+                        Ok
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${isShowModalDeny}" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-[344px] shadow-lg">
+            <!-- Header -->
+            <h3 class="text-lg font-semibold text-center mb-4 text-gray-800">
+                Xác nhận
+            </h3>
+
+            <!-- Nội dung -->
+            <p class="text-sm text-center text-gray-700 mb-6">
+                Bạn có chắc chắn muốn từ chối duyệt đăng ký không ?
+            </p>
+
+            <!-- Nút -->
+            <div class="flex justify-end gap-3">
+                <a th:href="@{managerEnrollment(isShowModalDeny = false)}"
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition"
+                >
+                    Hủy
+                </a>
+                <form th:action="@{denied(enrollmentId = ${enrollmentId})}" method="post">
+                    <button type="submit"
+                            class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+                    >
+                        Ok
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

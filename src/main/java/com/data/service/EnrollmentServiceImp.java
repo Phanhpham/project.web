@@ -46,4 +46,54 @@ public class EnrollmentServiceImp implements EnrollmentService {
     public List<Enrollment> sortStatus(int studentId, String sortType, int pageNo, int pageSize) {
         return enrollmentRepo.sortStatus(studentId,sortType,pageNo,pageSize);
     }
+
+    @Override
+    public long countToTalEnrollments() {
+        return enrollmentRepo.countToTalEnrollments();
+    }
+
+    @Override
+    public List<Enrollment> getAllStudentOfCourse(int pageNo, int pageSize) {
+        return enrollmentRepo.getAllStudentOfCourse(pageNo,pageSize);
+    }
+
+    @Override
+    public long count() {
+        return enrollmentRepo.count();
+    }
+
+    @Override
+    public void confirmEnrollment(int enrollmentId) {
+        enrollmentRepo.confirmEnrollment(enrollmentId);
+    }
+
+    @Override
+    public void denyEnrollment(int enrollmentId) {
+        enrollmentRepo.denyEnrollment(enrollmentId);
+    }
+
+    @Override
+    public List<Enrollment> filterStatus(String status, int pageNo, int pageSize) {
+        return enrollmentRepo.filterStatus(status,pageNo,pageSize);
+    }
+
+    @Override
+    public long countStatus(String status) {
+        return enrollmentRepo.countStatus(status);
+    }
+
+    @Override
+    public List<Enrollment> searchByNameCourse(String name, int pageNo, int pageSize) {
+        return enrollmentRepo.searchByNameCourse(name,pageNo,pageSize);
+    }
+
+    @Override
+    public long countSearch(String name) {
+        return enrollmentRepo.countSearch(name);
+    }
+
+    @Override
+    public void cancelRegisterCourse(int enrollmentId) {
+        enrollmentRepo.cancelRegisterCourse(enrollmentId);
+    }
 }

@@ -23,11 +23,11 @@
                 Clarity gives you the blocks and components you need to create a truly professional website.
             </p>
 
-            <form action="login" th:object="${signIn}" method="post" class="bg-gray-100 rounded-xl p-6">
+            <form th:action="@{/login-user}" th:object="${loginDTO}" method="post" class="bg-gray-100 rounded-xl p-6">
                 <h2 class="text-lg font-bold text-center text-gray-800 mb-4">Sign in</h2>
 
                 <div class="space-y-6">
-                    <input th:field="*{email}" type="email" placeholder="Email"
+                    <input th:field="*{email}" type="text" placeholder="Email"
                            class="w-full px-4 py-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <p class="text-red-500 text-sm" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</p>
 

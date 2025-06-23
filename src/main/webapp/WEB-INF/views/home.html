@@ -77,11 +77,10 @@
         <!-- Sidebar -->
         <aside class="w-64 bg-white shadow p-4">
             <nav class="space-y-3">
-                <a href="#" class="text-blue-500 font-semibold block">Dashboard</a>
-                <a href="#" class="text-gray-700 block">Students</a>
-                <a href="#" class="text-gray-700 block">Courses</a>
-                <a href="#" class="text-gray-700 block">Enrollments</a>
-                <a href="#" class="text-gray-700 block">Account Manager</a>
+                <a href="/home" class="text-blue-500 font-semibold block">Dashboard</a>
+                <a href="/pageStudent" class="text-gray-700 block">Students</a>
+                <a href="/pageCourse" class="text-gray-700 block">Courses</a>
+                <a href="/managerEnrollment" class="text-gray-700 block">Enrollments</a>
             </nav>
         </aside>
 
@@ -91,17 +90,17 @@
             <div class="grid grid-cols-3 gap-6 mb-6">
                 <div class="bg-white p-6 rounded shadow">
                     <p class="text-gray-500 text-sm">Total Student</p>
-                    <p class="text-2xl font-bold text-gray-800">456</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${totalStudent}"></p>
                     <p class="text-green-500 text-sm mt-1">+5.6%</p>
                 </div>
                 <div class="bg-white p-6 rounded shadow border border-purple-400">
                     <p class="text-gray-500 text-sm">Total Course</p>
-                    <p class="text-2xl font-bold text-gray-800">56</p>
+                    <p class="text-2xl font-bold text-gray-800" th:text="${totalCourse}">56</p>
                     <p class="text-green-500 text-sm mt-1">+5.6%</p>
                 </div>
                 <div class="bg-white p-6 rounded shadow">
                     <p class="text-gray-500 text-sm">Total Enrollment</p>
-                    <p class="text-2xl font-bold text-gray-800">325</p>
+                    <p class="text-2xl font-bold text-gray-800"  th:text="${totalEnrollment}">325</p>
                     <p class="text-green-500 text-sm mt-1">+5.6%</p>
                 </div>
             </div>
@@ -122,12 +121,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="border-b">
-                            <td class="px-3 py-2">C0001</td>
-                            <td class="px-3 py-2"><img src="https://via.placeholder.com/30" alt="Course"/></td>
-                            <td class="px-3 py-2">Basic Web Programming</td>
-                            <td class="px-3 py-2">230</td>
-                            <td class="px-3 py-2">123</td>
+                        <tr th:each="student :${totalStudents}" class="border-b">
+                            <td class="px-3 py-2" th:text="${student.courseId}">C0001</td>
+                            <td class="px-3 py-2">
+                                <img width="50" height="50" th:src="${student.image}" alt="Course"/></td>
+                            <td class="px-3 py-2" th:text="${student.courseName}">Basic Web Programming</td>
+                            <td class="px-3 py-2" th:text="${student.duration}">230</td>
+                            <td class="px-3 py-2" th:text="${student.totalStudent}">123</td>
                         </tr>
                         <!-- Thêm các hàng khác -->
                         </tbody>
@@ -138,25 +138,11 @@
                 <div class="bg-white p-4 rounded shadow">
                     <h2 class="text-lg font-semibold mb-4">Top 5 course best seller</h2>
                     <ul class="space-y-3">
-                        <li class="flex justify-between">
-                            <span>Basic Web Programming</span>
-                            <span class="text-sm text-gray-500">50 students</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Frontend with React</span>
-                            <span class="text-sm text-gray-500">48 students</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Backend with Node.js</span>
-                            <span class="text-sm text-gray-500">45 students</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Data Science with Python</span>
-                            <span class="text-sm text-gray-500">40 students</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Programming with Java</span>
-                            <span class="text-sm text-gray-500">39 students</span>
+                        <li th:each="student :${top5CourseMostStudent} " class="flex justify-between">
+                            <span class="px-3 py-2">
+                                <img width="40" height="40" th:src="${student.image}" alt="Course"/></span>
+                            <span th:text="${student.courseName}">Basic Web Programming</span>
+                            <span class="text-sm text-gray-500" th:text="${student.totalStudent}">50 students</span>
                         </li>
                     </ul>
                 </div>

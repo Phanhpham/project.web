@@ -2,6 +2,8 @@ package com.data.repository;
 
 import com.data.model.Course;
 import com.data.model.Enrollment;
+import com.data.model.Status;
+import com.data.model.Student;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -103,5 +105,132 @@ public class EnrollmentRepoImp implements EnrollmentRepo {
         List<Enrollment> enrollments = query.getResultList();
 
         return enrollments;
+    }
+
+    @Override
+    public long countToTalEnrollments() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Enrollment ", Long.class);
+            return query.uniqueResult();
+        }
+    }
+
+    @Override
+    public List<Enrollment> getAllStudentOfCourse(int pageNo, int pageSize) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Enrollment> query = session.createQuery("FROM Enrollment ", Enrollment.class);
+            query.setFirstResult((pageNo - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public long count() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Enrollment ", Long.class);
+            return query.uniqueResult();
+        }
+    }
+
+    @Override
+    public void confirmEnrollment(int enrollmentId) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Enrollment enrollment = session.get(Enrollment.class, enrollmentId);
+            if (enrollment != null){
+                enrollment.setStatus(Status.CONFIRMED);
+                session.update(enrollment);
+                tx.commit();
+            }
+        }finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public void denyEnrollment(int enrollmentId) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Enrollment enrollment = session.get(Enrollment.class, enrollmentId);
+            if (enrollment != null){
+                enrollment.setStatus(Status.DENIED);
+                session.update(enrollment);
+                tx.commit();
+            }
+        }finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public List<Enrollment> filterStatus(String status, int pageNo, int pageSize) {
+        Session session = sessionFactory.openSession();
+        try{
+            Status status1 = Status.valueOf(status);
+            String hql = " from Enrollment where status = :status";
+            Query<Enrollment> query = session.createQuery(hql,Enrollment.class);
+            query.setParameter("status",status1);
+            query.setFirstResult((pageNo - 1) * pageSize);
+            query.setMaxResults(pageSize);
+            return query.getResultList();
+        }finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public long countStatus(String status) {
+        try (Session session = sessionFactory.openSession()) {
+            Status status1 = Status.valueOf(status);
+            Query<Long> query = session.createQuery("SELECT COUNT(*) FROM Enrollment where status = :status", Long.class);
+
+            query.setParameter("status",status1);
+            return query.uniqueResult();
+        }
+    }
+
+    @Override
+    public List<Enrollment> searchByNameCourse(String name, int pageNo, int pageSize) {
+        Session session = sessionFactory.openSession();
+
+        String hql = "FROM Enrollment e WHERE LOWER(e.course.name) LIKE CONCAT('%',:name, '%')";
+        Query<Enrollment> query = session.createQuery(hql, Enrollment.class);
+        query.setParameter("name", name);
+        query.setFirstResult((pageNo - 1) * pageSize);
+        query.setMaxResults(pageSize);
+        return query.getResultList();
+    }
+
+    @Override
+    public long countSearch(String name) {
+        Session session = sessionFactory.openSession();
+
+        String hql = "SELECT COUNT(e) FROM Enrollment e WHERE LOWER(e.course.name) LIKE :name";
+
+        return (Long) session.createQuery(hql)
+                .setParameter("name", "%" + name.toLowerCase() + "%")
+                .uniqueResult();
+    }
+
+    @Override
+    public void cancelRegisterCourse(int enrollmentId) {
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Enrollment enrollment = session.get(Enrollment.class, enrollmentId);
+            if (enrollment != null){
+                enrollment.setStatus(Status.CANCELED);
+                session.update(enrollment);
+                tx.commit();
+            }
+        }finally {
+            session.close();
+        }
     }
 }

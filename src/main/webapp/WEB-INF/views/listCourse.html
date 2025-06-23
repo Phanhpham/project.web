@@ -17,9 +17,9 @@
              alt="Logo" class="h-8">
     </div>
     <nav class="flex items-center gap-6 text-sm font-medium text-gray-600">
-        <a href="#" class="text-blue-600">List Course</a>
-        <a th:href="@{'history/'+ ${student.id}}">Enrollments</a>
-        <a href="#">Profile</a>
+        <a href="/list" class="hover:text-blue-600 text-blue-600 underline">List Course</a>
+        <a th:href="@{'history/'+ ${student != null? student.id:0}}" class="hover:text-blue-600">Enrollments</a>
+        <a href="/profileUser" class="hover:text-blue-600 ">Profile</a>
     </nav>
     <div class="flex items-center gap-4">
         <!-- Mail Icon -->

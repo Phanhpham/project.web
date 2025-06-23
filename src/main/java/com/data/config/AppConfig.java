@@ -3,6 +3,7 @@ package com.data.config;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.hibernate.SessionFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -149,5 +150,9 @@ public class AppConfig implements WebMvcConfigurer , ApplicationContextAware {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("/static/");
 
+    }
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }

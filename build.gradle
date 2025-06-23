@@ -64,6 +64,8 @@ dependencies {
     //hibernate
     implementation 'org.hibernate:hibernate-core:5.4.32.Final'
 
+    implementation "org.modelmapper:modelmapper:2.4.2"
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<!-- Header -->
+<header class="flex items-center justify-between px-8 py-4 border-b bg-white shadow-sm">
+    <div class="flex items-center gap-3">
+        <img src="https://res.cloudinary.com/dfqukquzq/image/upload/v1749969776/819bc04f5546ebd7a87a7a8ebe401a97208935eb_juxmkg.png"
+             alt="Logo" class="h-8">
+    </div>
+    <nav class="flex items-center gap-6 text-sm font-medium text-gray-600">
+        <a href="/list" class="hover:text-blue-600">List Course</a>
+        <a th:href="@{'history/'+ ${student != null? student.id:0}}" class="hover:text-blue-600">Enrollments</a>
+        <a href="/profileUser" class="text-blue-600 underline">Profile</a>
+    </nav>
+    <div class="flex items-center gap-4">
+        <button class="relative">
+            <i class="fa-regular fa-envelope text-lg"></i>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <button class="relative">
+            <svg class="w-6 h-6 text-gray-600 hover:text-blue-600" fill="none" stroke="currentColor"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <img src="https://i.pravatar.cc/40" alt="Avatar" class="w-10 h-10 rounded-full"/>
+        <button class="text-sm text-red-600 font-medium hover:underline">Logout</button>
+    </div>
+</header>
+
+<!-- Profile Section -->
+<main class="flex flex-col items-center justify-start py-12 px-4 sm:px-6 lg:px-8">
+    <div class="w-full max-w-2xl bg-white shadow-md rounded-lg p-8">
+        <h2 class="text-center text-3xl font-bold text-yellow-500 mb-6">My Profile</h2>
+
+        <div class="flex justify-end mb-6">
+            <a th:href="@{profileUser(isShowForm = true)}">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded shadow-sm">
+                    Change Password
+                </button>
+            </a>
+
+        </div>
+
+        <form action="profileUser" method="post" th:object="${student}" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-500">*</span></label>
+                <input type="hidden" th:field="*{id}">
+                <input th:field="*{name}"  type="text" value="Nguyen Van A"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"/>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                   class="text-sm text-red-600 mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone <span class="text-red-500">*</span></label>
+                <input th:field="*{phone}" type="text" value="0967309542"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"/>
+                <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+                   class="text-sm text-red-600 mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                <input th:field="*{email}" type="text" value="huongcao9h@gmail.com"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"/>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                   class="text-sm text-red-600 mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Gender <span class="text-red-500">*</span></label>
+                <select th:field="*{sex}" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-blue-400">
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
+                </select>
+                <p th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"
+                   class="text-sm text-red-600 mt-1"></p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+                <input th:field="*{dob}" type="date" value="1994-02-23"
+                       class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"/>
+                <p th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"
+                   class="text-sm text-red-600 mt-1"></p>
+            </div>
+
+            <div class="flex justify-center pt-4">
+                <button type="submit"
+                        class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-2 rounded shadow-md">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+<div th:if="${isShowForm}" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6 relative">
+        <!-- Close button -->
+        <a th:href="@{profileUser(isShowForm =false)}">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-black text-xl font-bold">
+                &times;
+            </button>
+        </a>
+
+
+        <!-- Title -->
+        <h2 class="text-xl font-semibold mb-6 text-center">Change Password</h2>
+
+        <!-- Form -->
+        <form action="changePassword" method="post">
+            <!-- Old Password -->
+            <div class="mb-4">
+                <label for="oldPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                    Mật khẩu hiện tại <span class="text-red-500">*</span>
+                </label>
+                <input
+                        type="password"
+                        id="oldPassword"
+                        name="oldPassword"
+                        th:value="${oldPassword}"
+                        placeholder="Nhập mật khẩu hiện tại"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <p class="mt-1 text-sm text-red-500" th:if="${oldPasswordError}" th:text="${oldPasswordError}"></p>
+            </div>
+
+            <!-- New Password -->
+            <div class="mb-4">
+                <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                    Mật khẩu mới <span class="text-red-500">*</span>
+                </label>
+                <input
+                        type="password"
+                        id="newPassword"
+                        name="newPassword"
+                        th:value="${newPassword}"
+                        placeholder="Nhập mật khẩu mới"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <p class="mt-1 text-sm text-red-500" th:if="${newPasswordError}" th:text="${newPasswordError}"></p>
+            </div>
+
+            <!-- Confirm New Password -->
+            <div class="mb-6">
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+                    Xác nhận mật khẩu mới <span class="text-red-500">*</span>
+                </label>
+                <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        th:value="${confirmPassword}"
+                        placeholder="Xác nhận mật khẩu mới"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <p class="mt-1 text-sm text-red-500" th:if="${confirmPasswordError}" th:text="${confirmPasswordError}"></p>
+            </div>
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-3">
+                <a th:href="@{profileUser(isShowForm = false)}">
+                    <button
+                            type="button"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
+                    >
+                        Cancel
+                    </button>
+                </a>
+
+                <button
+                        type="submit"
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                >
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
